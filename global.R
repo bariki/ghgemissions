@@ -1,3 +1,7 @@
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
 #data source
 df1 = tbl_df(read.csv("df.csv"))
 
@@ -19,9 +23,10 @@ number_compress <- function(tx) {
 
 ### region overall bar graph
 regional_overall_bar = function(input) {
-  temp1 = df1 %>% filter( year >= input$overall_year_filter[1] & year <= input$overall_year_filter[2] ) %>%
-    group_by(region) %>% 
-    summarise(amount = sum(amount)) %>% 
+  temp1 = df1 %>% filter(year >= input$regional_year_filter[1] &
+                           year <= input$regional_year_filter[2]) %>%
+    group_by(region) %>%
+    summarise(amount = sum(amount)) %>%
     arrange((amount))
   chart <-
     gvisBarChart(
@@ -29,9 +34,7 @@ regional_overall_bar = function(input) {
       xvar = "region",
       yvar = c('amount'),
       options = list(
-        title = "Reginal Green Gas Emissions",
-        vAxis="{title:'Tones'}",
-        titleTextStyle = "{color:'#4183c4',fontName:'Courier',fontSize:20}",
+        vAxis = "{title:'Tones'}",
         bar = "{groupWidth:'90%'}",
         resolution = "provinces",
         width = "100%",
@@ -41,9 +44,29 @@ regional_overall_bar = function(input) {
     )
   
   return (chart)
-
+  
 }
 
+### country map graph
+country_map = function(input) {
+  temp1 = df1 %>% filter(year >= input$dashboard_year_filter[1] &
+                           year <= input$dashboard_year_filter[2]) %>%
+    group_by(country) %>%
+    summarise(Tones = sum(amount))
+  
+  chart = gvisGeoChart(
+    temp1,
+    locationvar = "country",
+    colorvar = "Tones",
+    options = list(
+      width = '100%',
+      height = 500
+    )
+  )
+  
+  return (chart)
+  
+}
 
 ### region overall plotbox graph
 temp2 = df1 %>% group_by(region, year) %>% summarise(amount = sum(amount))
@@ -56,10 +79,10 @@ regional_overall_boxplot = ggplot(temp2, aes(x = region, y = amount)) +
 
 ### region trend graph
 regional_trend_line = function(input) {
-  
-  temp3 = df1 %>% filter( year >= input$trend_year_filter[1] & year <= input$trend_year_filter[2] ) %>%
-    group_by(region, year) %>% 
-    summarise(amount = sum(amount)) %>% 
+  temp3 = df1 %>% filter(year >= input$trend_year_filter[1] &
+                           year <= input$trend_year_filter[2]) %>%
+    group_by(region, year) %>%
+    summarise(amount = sum(amount)) %>%
     spread(region, amount)
   
   chart = gvisLineChart(
@@ -67,11 +90,9 @@ regional_trend_line = function(input) {
     xvar = "year",
     yvar = as.vector(names(temp3)[-1]),
     options = list(
-      title = "Trend of Reginal Green Gas Emissions per year",
-      vAxis="{title:'Tones'}",
-      titleTextStyle = "{color:'#4183c4',fontName:'Courier',fontSize:20}",
+      vAxis = "{title:'Tones'}",
       resolution = "provinces",
-      width = "80%",
+      width = "100%",
       height = "500px",
       legend = "{ position: 'right' }"
     )
@@ -96,9 +117,7 @@ country_comparison = function(input) {
     xvar = "year",
     yvar = as.vector(names(temp4)[-1]),
     options = list(
-      title = "Trend of country Green Gas Emissions per year",
-      vAxis="{title:'Tones'}",
-      titleTextStyle = "{color:'#4183c4',fontName:'Courier',fontSize:20}",
+      vAxis = "{title:'Tones'}",
       resolution = "provinces",
       width = "100%",
       height = "500px",
@@ -109,4 +128,3 @@ country_comparison = function(input) {
   return (chart)
   
 }
-

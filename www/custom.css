@@ -3,3 +3,9 @@
   font-weight: bold;
   font-size: 24px;
 }
+h2.title {
+    /* text-align: center; */
+    color: #11728e;
+    border-bottom: 1px solid #01c0ef;
+    padding-bottom: 20px;
+}

@@ -10,19 +10,24 @@ shinyUI(dashboardPage(
         
         sidebarMenu(
             menuItem(
-                "Regional Overall",
+                "Dashboard",
+                tabName = "dashboard",
+                icon = icon("home")
+            ),
+            menuItem(
+                "Reginal Overview",
                 tabName = "regional_overall",
-                icon = icon("map")
+                icon = icon("angle-double-right")
             ),
             menuItem(
                 "Reginal Trends",
                 tabName = "regional_trend",
-                icon = icon("database")
+                icon = icon("angle-double-right")
             ),
             menuItem(
-                "Country Comparisons",
+                "Country Trends",
                 tabName = "country_comparison",
-                icon = icon("database")
+                icon = icon("angle-double-right")
             )
             # hr(),
             # menuItem("Country Profile", tabName = "country_profile", icon = icon("database")),
@@ -36,7 +41,7 @@ shinyUI(dashboardPage(
         ),
         tabItems(
             tabItem(
-                tabName = "regional_overall",
+                tabName = "dashboard",
                 fluidRow(
                     infoBoxOutput("topEmisioner1", width = 6),
                     infoBoxOutput("topEmisioner2", width = 6)
@@ -45,7 +50,7 @@ shinyUI(dashboardPage(
                 fluidRow(column(
                     12,
                     sliderInput(
-                        "overall_year_filter",
+                        "dashboard_year_filter",
                         "Year between:",
                         min = year_from,
                         max = year_to,
@@ -56,12 +61,38 @@ shinyUI(dashboardPage(
                 
                 fluidRow(column(
                     12, box(
-                        htmlOutput("regional_overall_bar"),
+                        HTML("<h2 class='title'>World Green House Gas Emissions</h2>"),
+                        htmlOutput("country_map"),
                         width = "100%",
                         height = 600
                     )
                 ))
+                
             ),
+            
+            tabItem(tabName = "regional_overall",
+                    
+                    fluidRow(column(
+                        12,
+                        sliderInput(
+                            "regional_year_filter",
+                            "Year between:",
+                            min = year_from,
+                            max = year_to,
+                            value = c(year_from, year_to),
+                            width = "90%"
+                        )
+                    )),
+                    
+                    fluidRow(column(
+                        12, box(
+                            HTML("<h2 class='title'>Reginal Green Gas Emissions</h2>"),
+                            htmlOutput("regional_overall_bar"),
+                            width = "100%",
+                            height = 600
+                        )
+                    ))),
+            
             
             tabItem(tabName = "regional_trend",
                     
@@ -79,6 +110,7 @@ shinyUI(dashboardPage(
                     
                     fluidRow(column(
                         12, box(
+                            HTML("<h2 class='title'>Trend of Reginal Green Gas Emissions per year</h2>"),
                             htmlOutput("regional_trend_line"),
                             width = "100%",
                             height = 600
@@ -129,6 +161,7 @@ shinyUI(dashboardPage(
                 )),
                 
                 fluidRow(box(
+                    HTML("<h2 class='title'>Trend of country Green Gas Emissions per year</h2>"),
                     htmlOutput("country_comparison"),
                     width = 12,
                     height = 600
