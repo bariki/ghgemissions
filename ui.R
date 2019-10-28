@@ -86,7 +86,7 @@ shinyUI(dashboardPage(
                     
                     fluidRow(column(
                         12, box(
-                            HTML("<h2 class='title'>Reginal Green Gas Emissions</h2>"),
+                            HTML("<h2 class='title'>Reginal House Green Gas Emissions</h2>"),
                             htmlOutput("regional_overall_bar"),
                             width = "100%",
                             height = 600
@@ -110,7 +110,7 @@ shinyUI(dashboardPage(
                     
                     fluidRow(column(
                         12, box(
-                            HTML("<h2 class='title'>Trend of Reginal Green Gas Emissions per year</h2>"),
+                            HTML("<h2 class='title'>Trend of Reginal Green House Gas Emissions per year</h2>"),
                             htmlOutput("regional_trend_line"),
                             width = "100%",
                             height = 600
@@ -161,13 +161,20 @@ shinyUI(dashboardPage(
                 )),
                 
                 fluidRow(box(
-                    HTML("<h2 class='title'>Trend of country Green Gas Emissions per year</h2>"),
+                    HTML("<h2 class='title'>Trend of country Green House Gas Emissions per year</h2>"),
                     htmlOutput("country_comparison"),
                     width = 12,
                     height = 600
                 ))
             )
  
-        )
+        ),
+        
+        fluidRow(column(
+            12,
+                HTML("<p class='footer'>Bariki Elilaki : bariki.elilaki@gmail.com</p>")
+                
+        ))
+        
     )
 ))

@@ -26,15 +26,16 @@ regional_overall_bar = function(input) {
   temp1 = df1 %>% filter(year >= input$regional_year_filter[1] &
                            year <= input$regional_year_filter[2]) %>%
     group_by(region) %>%
-    summarise(amount = sum(amount)) %>%
-    arrange((amount))
+    summarise(Tones = sum(amount)) %>%
+    arrange((Tones))
   chart <-
     gvisBarChart(
       temp1,
       xvar = "region",
-      yvar = c('amount'),
+      yvar = c('Tones'),
       options = list(
-        vAxis = "{title:'Tones'}",
+        vAxis = "{title:'Regions'}",
+        hAxis = "{title:'Tones'}",
         bar = "{groupWidth:'90%'}",
         resolution = "provinces",
         width = "100%",
@@ -82,8 +83,8 @@ regional_trend_line = function(input) {
   temp3 = df1 %>% filter(year >= input$trend_year_filter[1] &
                            year <= input$trend_year_filter[2]) %>%
     group_by(region, year) %>%
-    summarise(amount = sum(amount)) %>%
-    spread(region, amount)
+    summarise(Tones = sum(amount)) %>%
+    spread(region, Tones)
   
   chart = gvisLineChart(
     temp3,
@@ -91,6 +92,7 @@ regional_trend_line = function(input) {
     yvar = as.vector(names(temp3)[-1]),
     options = list(
       vAxis = "{title:'Tones'}",
+      hAxis = "{title:'Year'}",
       resolution = "provinces",
       width = "100%",
       height = "500px",
@@ -109,8 +111,8 @@ country_comparison = function(input) {
       year <= input$com_year_filter[2]
   ) %>%
     group_by(country, year) %>%
-    summarise(amount = sum(amount)) %>%
-    spread(country, amount)
+    summarise(Tones = sum(amount)) %>%
+    spread(country, Tones)
   
   chart = gvisLineChart(
     temp4,
@@ -118,6 +120,7 @@ country_comparison = function(input) {
     yvar = as.vector(names(temp4)[-1]),
     options = list(
       vAxis = "{title:'Tones'}",
+      hAxis = "{title:'Year'}",
       resolution = "provinces",
       width = "100%",
       height = "500px",
