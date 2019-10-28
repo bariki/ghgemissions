@@ -1,6 +1,14 @@
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+library(googleVis)
+library(shiny)
+library(shinydashboard)
+
+#library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
 
 #data source
 df1 = tbl_df(read.csv("df.csv"))
@@ -66,6 +74,23 @@ country_map = function(input) {
   )
   
   return (chart)
+  
+}
+
+
+### country worldMap
+country_word_map = function(input) {
+  
+  temp1 = df1 %>% filter(year >= input$dashboard_year_filter[1] &
+                           year <= input$dashboard_year_filter[2]) %>%
+    group_by(country) %>%
+    summarise(Tones = sum(amount))
+  
+  map = wordcloud(words = temp1$country, freq = temp1$Tones, min.freq = 1,
+            max.words=10, random.order=FALSE, rot.per=0, scale=c(2,1),
+            colors=brewer.pal(8, "Dark2"))
+  
+  return (map)
   
 }
 

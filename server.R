@@ -1,12 +1,9 @@
-library(shiny)
-library(googleVis)
-library(tidyr)
-library(dplyr)
-library(ggplot2)
 
 shinyServer(function(input, output){
     
     output$country_map = renderGvis(country_map(input))
+    
+    output$country_word_map = renderPlot( country_word_map(input) )
     
     output$regional_overall_bar = renderGvis(regional_overall_bar(input))
     
