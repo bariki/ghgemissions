@@ -1,7 +1,8 @@
 
 
+
 shinyUI(dashboardPage(
-    dashboardHeader(title = "GHG Emissions"),
+    dashboardHeader(title = "G gases Emissions", titleWidth = 260),
     dashboardSidebar(
         # sidebarUserPanel("OPEN DATA",
         #                  image = "https://yt3.ggpht.com/-04uuTMHfDz4/AAAAAAAAAAI/AAAAAAAAAAA/Kjeupp-eNNg/s100-c-k-no-rj-c0xffffff/photo.jpg"
@@ -9,11 +10,9 @@ shinyUI(dashboardPage(
         # hr(),
         
         sidebarMenu(
-            menuItem(
-                "Dashboard",
-                tabName = "dashboard",
-                icon = icon("home")
-            ),
+            menuItem("Dashboard",
+                     tabName = "dashboard",
+                     icon = icon("home")),
             menuItem(
                 "Reginal Overview",
                 tabName = "regional_overall",
@@ -28,13 +27,19 @@ shinyUI(dashboardPage(
                 "Country Trends",
                 tabName = "country_comparison",
                 icon = icon("angle-double-right")
+            ),
+            menuItem(
+                "Data Source",
+                tabName = "data_table",
+                icon = icon("angle-double-right")
             )
             # hr(),
             # menuItem("Country Profile", tabName = "country_profile", icon = icon("database")),
             # menuItem("Country Comparisons", tabName = "map", icon = icon("database")),
             # menuItem("Country Profile", tabName = "data", icon = icon("database"))
             
-        )),
+        )
+    ),
     dashboardBody(
         tags$head(
             tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
@@ -43,8 +48,9 @@ shinyUI(dashboardPage(
             tabItem(
                 tabName = "dashboard",
                 fluidRow(
-                    infoBoxOutput("topEmisioner1", width = 6),
-                    infoBoxOutput("topEmisioner2", width = 6)
+                    infoBoxOutput("min_emission", width = 4),
+                    infoBoxOutput("max_emission", width = 4),
+                    infoBoxOutput("status_emission", width = 4)
                 ),
                 
                 fluidRow(column(
@@ -55,15 +61,16 @@ shinyUI(dashboardPage(
                         min = year_from,
                         max = year_to,
                         value = c(year_from, year_to),
-                        width = "90%"
+                        step = 1,
+                        width = "99%"
                     )
                 )),
                 
                 fluidRow(column(
                     12, box(
-                        HTML("<h2 class='title'>World Green House Gas Emissions</h2>"),
-                        column( 8, htmlOutput("country_map") ),
-                        column( 4, plotOutput("country_word_map") ),
+                        HTML("<h2 class='title'>Country Green House Gas Emissions</h2>"),
+                        column(8, htmlOutput("country_map")),
+                        column(4, plotOutput("country_word_map")),
                         width = "100%",
                         height = 600
                     )
@@ -73,17 +80,29 @@ shinyUI(dashboardPage(
             
             tabItem(tabName = "regional_overall",
                     
-                    fluidRow(column(
-                        12,
-                        sliderInput(
-                            "regional_year_filter",
-                            "Year between:",
-                            min = year_from,
-                            max = year_to,
-                            value = c(year_from, year_to),
-                            width = "90%"
+                    fluidRow(
+                        column(
+                            4,
+                            selectInput(
+                                "regional_aggregate_filter",
+                                "Aggregate Type",
+                                choices = aggregate_types,
+                                selected = 1
+                            )
+                        ),
+                        column(
+                            8,
+                            sliderInput(
+                                "regional_year_filter",
+                                "Year between:",
+                                min = year_from,
+                                max = year_to,
+                                value = c(year_from, year_to),
+                                step = 1,
+                                width = "99%"
+                            )
                         )
-                    )),
+                    ),
                     
                     fluidRow(column(
                         12, box(
@@ -105,13 +124,16 @@ shinyUI(dashboardPage(
                             min = year_from,
                             max = year_to,
                             value = c(year_from, year_to),
-                            width = "90%"
+                            step = 1,
+                            width = "99%"
                         )
                     )),
                     
                     fluidRow(column(
                         12, box(
-                            HTML("<h2 class='title'>Trend of Reginal Green House Gas Emissions per year</h2>"),
+                            HTML(
+                                "<h2 class='title'> Reginal Trends of Green House Gas Emissions per year</h2>"
+                            ),
                             htmlOutput("regional_trend_line"),
                             width = "100%",
                             height = 600
@@ -120,7 +142,6 @@ shinyUI(dashboardPage(
             
             tabItem(
                 tabName = "country_comparison",
-                
                 fluidRow(
                     column(
                         4,
@@ -157,24 +178,63 @@ shinyUI(dashboardPage(
                         min = year_from,
                         max = year_to,
                         value = c(year_from, year_to),
-                        width = "90%"
+                        step = 1,
+                        width = "99%"
                     )
                 )),
                 
                 fluidRow(box(
-                    HTML("<h2 class='title'>Trend of country Green House Gas Emissions per year</h2>"),
+                    HTML(
+                        "<h2 class='title'>Country Trends of Green House Gas Emissions per year</h2>"
+                    ),
                     htmlOutput("country_comparison"),
                     width = 12,
                     height = 600
                 ))
-            )
- 
+            ),
+            
+            
+            tabItem(tabName = "data_table",
+                    
+                    fluidRow(
+                        column(4,
+                               selectInput(
+                                   "table_region_filter", "Region:", c("ALL", unique(as.character(
+                                       region_names$region
+                                   )))
+                               )),
+                        column(
+                            8,
+                            sliderInput(
+                                "table_year_filter",
+                                "Year between:",
+                                min = year_from,
+                                max = year_to,
+                                value = c(year_from, year_to),
+                                step = 1,
+                                width = "99%"
+                            )
+                        )
+                    ),
+                    
+                    fluidRow(column(
+                        12, box(
+                            HTML("<h2 class='title'> Green House Gas Emissions Data</h2>"),
+                            DT::dataTableOutput("table"),
+                            width = "100%",
+                            height = 600
+                        )
+                    )))
+            
         ),
+        
         
         fluidRow(column(
             12,
-                HTML("<p class='footer'>Bariki Elilaki : bariki.elilaki@gmail.com</p>")
-                
+            HTML(
+                "<p class='footer'>Bariki Elilaki : bariki.elilaki@gmail.com</p>"
+            )
+            
         ))
         
     )

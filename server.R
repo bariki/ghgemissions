@@ -11,15 +11,20 @@ shinyServer(function(input, output){
     
     output$country_comparison = renderGvis(country_comparison(input))
     
-    output$topEmisioner1 <- renderInfoBox(
-        infoBox("Country with Lowest Emission ",
-                number_compress(emmison_min_current_year), paste("Tones in ",year_to),
-                icon = icon("chevron-down"), fill = TRUE))
+    output$min_emission <- renderInfoBox( min_emission(input) )
     
-    output$topEmisioner2 <- renderInfoBox(
-        infoBox("Country with Highest Emission",
-                number_compress(emmison_max_current_year), paste("Tones in ",year_to), 
-                icon = icon("chevron-up"), fill = TRUE))
+    output$max_emission <- renderInfoBox( max_emission(input) )
+    
+    output$status_emission <- renderInfoBox( status_emission(input) )
+    
+    output$table <- DT::renderDataTable(DT::datatable({
+        data <- dataSource %>% filter(year >= input$table_year_filter[1] & year <= input$table_year_filter[2])
+        if (input$table_region_filter != "ALL") {
+            data <- data[data$region == input$table_region_filter,]
+        }
+        names(data) = toupper(names(data))
+        data
+    }))
     
     
 })
