@@ -297,3 +297,50 @@ country_comparison = function(input) {
   return (chart)
   
 }
+
+
+### emission rate chart
+emission_rate_chart = function(input) {
+  
+  # temp1 = dataSource %>% filter( year >= 2001) %>%
+  #   group_by(country) %>%
+  #   mutate(diff = amount - lag(amount)) %>% drop_na()
+  
+  temp1 = dataSource
+  if (input$decrease_emission_region_filter != "ALL") {
+    temp1 = dataSource %>% filter( region == input$decrease_emission_region_filter)
+  }
+  
+  temp2 = temp1 %>% filter(year >= input$decrease_emission_year_filter[1] &
+                                  year <= input$decrease_emission_year_filter[2]) %>%
+    group_by(country) %>%
+    mutate(diff = amount - lag(amount)) %>% drop_na()
+    
+  temp3 = temp2 %>% group_by(country) %>% summarise(Tones = -1*mean(diff))
+  
+  if (input$decrease_emission_type == "Best") {
+    temp3 = temp3 %>% arrange( desc(Tones) ) %>% head( input$decrease_emission_num )
+  }
+  else {
+    temp3 = temp3 %>% arrange( Tones ) %>% head( input$decrease_emission_num )
+  }
+  
+  chart <-
+    gvisBarChart(
+      temp3,
+      xvar = "country",
+      yvar = c('Tones'),
+      options = list(
+        vAxis = "{title:'Country'}",
+        hAxis = "{title:'Average rate of decrease in Tones per year'}",
+        bar = "{groupWidth:'80%'}",
+        resolution = "provinces",
+        width = "100%",
+        height = "600px",
+        legend = "{ position: 'none' }"
+      )
+    )
+  
+  return (chart)
+  
+}

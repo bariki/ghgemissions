@@ -29,6 +29,11 @@ shinyUI(dashboardPage(
                 icon = icon("angle-double-right")
             ),
             menuItem(
+                "Emission Decrease Rate",
+                tabName = "decrease_emission_rate",
+                icon = icon("angle-double-right")
+            ),
+            menuItem(
                 "Data Source",
                 tabName = "data_table",
                 icon = icon("angle-double-right")
@@ -193,6 +198,44 @@ shinyUI(dashboardPage(
                 ))
             ),
             
+            tabItem(tabName = "decrease_emission_rate",
+                    
+                    fluidRow(
+                        column(2,
+                               selectInput(
+                                   "decrease_emission_region_filter", "Region:", c("ALL", unique(as.character(
+                                       region_names$region
+                                   )))
+                               )),
+                        column(2,
+                               selectInput(
+                                   "decrease_emission_type", "Decrease Rate:", c("Best","Worst")
+                               )),
+                        column(2,
+                               numericInput("decrease_emission_num", "Number of Country", 10, min = 1, max = 30)
+                               ),
+                        column(
+                            6,
+                            sliderInput(
+                                "decrease_emission_year_filter",
+                                "Year between:",
+                                min = year_from,
+                                max = year_to,
+                                value = c(year_from, year_to),
+                                step = 1,
+                                width = "99%"
+                            )
+                        )
+                    ),
+                    
+                    fluidRow(column(
+                        12, box(
+                            HTML("<h2 class='title'> Green House Gas Emissions Decrease Rate</h2>"),
+                            htmlOutput("emission_rate_chart"),
+                            width = "100%",
+                            height = 800
+                        )
+                    ))),
             
             tabItem(tabName = "data_table",
                     

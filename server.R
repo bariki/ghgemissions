@@ -7,6 +7,8 @@ shinyServer(function(input, output){
     
     output$regional_overall_bar = renderGvis(regional_overall_bar(input))
     
+    output$emission_rate_chart = renderGvis(emission_rate_chart(input))
+    
     output$regional_trend_line = renderGvis(regional_trend_line(input))
     
     output$country_comparison = renderGvis(country_comparison(input))
