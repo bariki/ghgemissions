@@ -302,10 +302,6 @@ country_comparison = function(input) {
 ### emission rate chart
 emission_rate_chart = function(input) {
   
-  # temp1 = dataSource %>% filter( year >= 2001) %>%
-  #   group_by(country) %>%
-  #   mutate(diff = amount - lag(amount)) %>% drop_na()
-  
   temp1 = dataSource
   if (input$decrease_emission_region_filter != "ALL") {
     temp1 = dataSource %>% filter( region == input$decrease_emission_region_filter)
