@@ -2,7 +2,7 @@
 
 My career aspirations in data science is to develop various software to help people to make better business decision.
 
-In this Shiny project, I choose to visualize Greenhouse gases emissions which is a great cause of global warming.
+In this Shiny project, I choose to visualize Greenhouse gases emissions which is a great cause of the global warming.
 
 Greenhouse gases surround the Earth like a blanket. As we use burn more coal, natural gas, and oil, the blanket becomes excessively thick, dense, and less likely to allow heat to escape. Heat gets trapped inside the blanket of greenhouse gases and the Earth becomes too warm.
 
